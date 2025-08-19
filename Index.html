@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paygo</title>
+    <!-- Use Tailwind CSS for a clean and responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Use Phosphor Icons for the copy icon -->
+    <script src="https://unpkg.com/@phosphor-icons/web@2.0.3"></script>
+    <style>
+        body {
+            /* Colorful gradient background */
+            background: linear-gradient(135deg, #fce38a, #ff6b6b, #4a90e2, #a18cd1);
+            background-size: 400% 400%;
+            animation: gradient-shift 15s ease infinite;
+            font-family: 'Inter', sans-serif;
+        }
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        /* Custom scrollbar for the withdrawal messages */
+        .scrolling-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+        .scrolling-messages::-webkit-scrollbar-track {
+            background: #e5e7eb;
+            border-radius: 10px;
+        }
+        .scrolling-messages::-webkit-scrollbar-thumb {
+            background: #9ca3af;
+            border-radius: 10px;
+        }
+        .scrolling-messages::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #ff6b6b; /* Red spinner to match new theme */
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-gray-800 flex justify-center items-center min-h-screen p-4">
+
+    <!-- Main container for all pages, with a centered, responsive layout -->
+    <main id="app-container" class="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-auto p-8 border border-gray-200">
+
+        <!-- Login Page -->
+        <div id="login-page" class="page">
+            <h1 class="text-3xl font-extrabold text-center text-violet-700 mb-2">Welcome back!!!</h1>
+            <p class="text-xl font-semibold text-center text-gray-600 mb-8">Login Now!!!</p>
+            
+            <div class="space-y-4">
+                <div>
+                    <label for="login-username" class="sr-only">Username</label>
+                    <input type="text" id="login-username" placeholder="Username" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200" required>
+                </div>
+                <div>
+                    <label for="login-password" class="sr-only">Password</label>
+                    <input type="password" id="login-password" placeholder="Password" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200" required>
+                </div>
+            </div>
+
+            <button id="login-btn" class="w-full mt-6 bg-violet-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-violet-700 transition duration-300 shadow-md">Login</button>
+            <button id="to-register-btn" class="w-full mt-3 bg-gray-200 text-gray-700 font-bold py-3 px-4 rounded-lg hover:bg-gray-300 transition duration-300 shadow-md">Register</button>
+        </div>
+
+        <!-- Register Page -->
+        <div id="register-page" class="page hidden">
+            <h1 class="text-3xl font-extrabold text-center text-violet-700 mb-2">Welcome to Paygo 👊</h1>
+            <p class="text-xl font-semibold text-center text-gray-600 mb-8">Create an account with us now!!!</p>
+            
+            <div class="space-y-4">
+                <div>
+                    <label for="register-username" class="sr-only">Username</label>
+                    <input type="text" id="register-username" placeholder="Username" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200" required>
+                </div>
+                <div>
+                    <label for="register-email" class="sr-only">Email/phone number</label>
+                    <input type="text" id="register-email" placeholder="Email/phone number" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200" required>
+                </div>
+                <div>
+                    <label for="register-referral" class="sr-only">Referral box (optional)</label>
+                    <input type="text" id="register-referral" placeholder="Referral box (optional)" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200">
+                </div>
+                <div>
+                    <label for="register-password" class="sr-only">Password</label>
+                    <input type="password" id="register-password" placeholder="Password" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200" required>
+                </div>
+                <div>
+                    <label for="register-confirm-password" class="sr-only">Confirm Password</label>
+                    <input type="password" id="register-confirm-password" placeholder="Confirm password" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200" required>
+                </div>
+            </div>
+            
+            <button id="register-btn" class="w-full mt-6 bg-violet-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-violet-700 transition duration-300 shadow-md">Register</button>
+            <button id="back-to-login-btn" class="w-full mt-3 bg-gray-200 text-gray-700 font-bold py-3 px-4 rounded-lg hover:bg-gray-300 transition duration-300 shadow-md">Back to Login</button>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboard-page" class="page hidden">
+            <!-- Welcome popup -->
+            <div id="welcome-popup" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center z-50 p-4">
+                <div class="bg-white rounded-xl p-8 shadow-2xl text-center max-w-md w-full animate-fade-in">
+                    <div class="text-4xl mb-4">💰🎉</div>
+                    <h2 class="text-2xl font-bold mb-4 text-violet-600">Welcome to Paygo official web</h2>
+                    <p class="text-lg text-gray-700 mb-6">
+                        You will receive a bonus of NGN180,000 for free. Follow our guidelines and enjoy more bonuses for free!
+                    </p>
+                    <button id="thanks-btn" class="bg-violet-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-violet-700 transition duration-300 shadow-md">Thanks</button>
+                </div>
+            </div>
+
+            <!-- Main dashboard content -->
+            <div id="dashboard-main" class="hidden">
+                <h2 class="text-2xl font-bold mb-1"><span id="dashboard-username" class="text-violet-700"></span></h2>
+                <p class="text-lg font-medium text-gray-500 mb-6">Welcome to Paygo</p>
+
+                <div class="bg-purple-100 p-6 rounded-xl shadow-inner mb-6">
+                    <p class="text-sm font-medium text-purple-800">Your balance</p>
+                    <p id="dashboard-balance" class="text-3xl font-bold text-purple-900 mt-2">NGN180,000.00</p>
+                </div>
+
+                <button id="withdraw-btn" class="w-full bg-violet-600 text-white font-bold py-4 rounded-lg hover:bg-violet-700 transition duration-300 shadow-lg text-xl mb-6">
+                    Withdraw
+                </button>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <button id="get-grant-code-btn" class="bg-white text-violet-600 border border-violet-600 font-semibold py-3 px-2 rounded-lg hover:bg-violet-50 transition duration-300 shadow-sm text-sm">
+                        Get grant code
+                    </button>
+                    <button id="earn-more-btn" class="bg-white text-green-600 border border-green-600 font-semibold py-3 px-2 rounded-lg hover:bg-green-50 transition duration-300 shadow-sm text-sm">
+                        Earn more
+                    </button>
+                    <button id="profile-btn" class="bg-white text-blue-600 border border-blue-600 font-semibold py-3 px-2 rounded-lg hover:bg-blue-50 transition duration-300 shadow-sm text-sm">
+                        Profile
+                    </button>
+                    <button id="company-profile-btn" class="bg-white text-gray-600 border border-gray-600 font-semibold py-3 px-2 rounded-lg hover:bg-gray-50 transition duration-300 shadow-sm text-sm">
+                        Company Profile
+                    </button>
+                </div>
+
+                <div class="mt-8 bg-gray-50 rounded-xl p-4 h-32 overflow-y-auto scrolling-messages">
+                    <p class="text-lg font-bold mb-2">Live Withdrawals</p>
+                    <ul id="withdrawal-feed" class="text-sm text-gray-600 space-y-1"></ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Withdraw Page -->
+        <div id="withdraw-page" class="page hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-violet-700">Withdraw your money now!!!</h2>
+                <button id="back-to-dashboard-from-withdraw" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-300 transition duration-200">Back</button>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label for="account-number" class="sr-only">Account number</label>
+                    <input type="text" id="account-number" placeholder="Account number" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200" required>
+                </div>
+                <div>
+                    <label for="account-name" class="sr-only">Account name</label>
+                    <input type="text" id="account-name" placeholder="Account name" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200" required>
+                </div>
+                <div>
+                    <label for="bank-name" class="sr-only">Bank name</label>
+                    <input type="text" id="bank-name" placeholder="Bank name" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200" required>
+                </div>
+                <div>
+                    <label for="grant-code" class="sr-only">Grant code</label>
+                    <input type="password" id="grant-code" placeholder="Grant code" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200" required>
+                </div>
+                <div>
+                    <label for="amount" class="sr-only">Amount</label>
+                    <input type="number" id="amount" placeholder="Amount (e.g., 10000)" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200" required>
+                </div>
+            </div>
+            
+            <button id="initiate-withdraw-btn" class="w-full mt-6 bg-violet-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-violet-700 transition duration-300 shadow-md">Withdraw</button>
+            <p id="withdraw-error-msg" class="text-red-500 text-center mt-4 hidden"></p>
+        </div>
+        
+        <!-- Withdraw Confirmation Modal -->
+        <div id="withdraw-confirm-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center z-50 p-4 hidden">
+            <div class="bg-white rounded-xl p-8 shadow-2xl text-center max-w-sm w-full animate-fade-in">
+                <h2 class="text-2xl font-bold mb-4 text-violet-600">Confirm withdrawal!!!</h2>
+                <div class="text-left text-gray-700 space-y-2 mb-6">
+                    <p><span class="font-semibold">Amount:</span> <span id="confirm-amount"></span></p>
+                    <p><span class="font-semibold">Account Name:</span> <span id="confirm-account-name"></span></p>
+                    <p><span class="font-semibold">Account Number:</span> <span id="confirm-account-number"></span></p>
+                    <p><span class="font-semibold">Bank Name:</span> <span id="confirm-bank-name"></span></p>
+                </div>
+                <button id="confirm-withdraw-btn" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition duration-300 shadow-md">Confirm</button>
+            </div>
+        </div>
+
+        <!-- Withdraw Success Modal -->
+        <div id="withdraw-success-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center z-50 p-4 hidden">
+            <div class="bg-white rounded-xl p-8 shadow-2xl text-center max-w-sm w-full animate-fade-in">
+                <div class="text-5xl text-green-500 mb-4">✔</div>
+                <h2 class="text-2xl font-bold mb-4 text-green-600">Congratulations!</h2>
+                <p class="text-lg text-gray-700 mb-6">Your withdrawal has been sent to your account successfully.</p>
+                <button id="close-success-modal-btn" class="w-full bg-violet-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-violet-700 transition duration-300 shadow-md">Continue</button>
+            </div>
+        </div>
+        
+        <!-- Get Grant Code Page -->
+        <div id="get-grant-code-page" class="page hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-violet-700">Important of Grant code.</h2>
+                <button id="back-to-dashboard-from-grant-code" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-300 transition duration-200">Back</button>
+            </div>
+
+            <div class="bg-gray-100 p-6 rounded-xl shadow-inner mb-6">
+                <p class="text-lg text-gray-700 mb-4">
+                    Grant code was just recently implemented because of spamming and bot withdrawals. so we implemented the Grant code option where users purchase it and withdraw. you can purchase it from any trusted vendor, but it better you get it from the app here.
+                </p>
+                <p class="text-xl font-bold text-violet-900">Grant code amount <span class="text-red-500">NGN7,000</span></p>
+            </div>
+            <button id="purchase-grant-code-btn" class="w-full bg-violet-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-violet-700 transition duration-300 shadow-md">
+                Purchase
+            </button>
+        </div>
+
+        <!-- Grant Code Payment Page -->
+        <div id="grant-code-payment-page" class="page hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-violet-700">Make Payment</h2>
+                <button id="back-to-grant-code-page" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-300 transition duration-200">Back</button>
+            </div>
+
+            <div class="bg-gray-100 p-6 rounded-xl shadow-inner mb-6">
+                <p class="text-lg text-gray-700 mb-4">Make payment to this account below to get your Grant code immediately.</p>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center bg-white p-3 rounded-lg border">
+                        <span class="font-semibold text-gray-800">Account number:</span>
+                        <div class="flex items-center space-x-2">
+                            <span id="account-number-display" class="text-violet-600 font-medium">8032656756</span>
+                            <button id="copy-account-number-btn" class="p-1 text-gray-500 hover:text-violet-600 transition duration-200">
+                                <i class="ph-bold ph-copy text-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border">
+                        <span class="font-semibold text-gray-800">Account name:</span>
+                        <p class="text-violet-600 font-medium">Sunday Justina (Paygo vendor)</p>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border">
+                        <span class="font-semibold text-gray-800">Bank name:</span>
+                        <p class="text-violet-600 font-medium">Palmpay</p>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border">
+                        <span class="font-semibold text-gray-800">Amount:</span>
+                        <p class="text-red-500 font-bold text-xl">NGN7,000</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="made-payment-btn" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition duration-300 shadow-md">
+                I have made payment
+            </button>
+            <p id="payment-status-message" class="text-center mt-4 hidden"></p>
+        </div>
+
+        <!-- Earn More Page -->
+        <div id="earn-more-page" class="page hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-violet-700">Refer and earn massively 🎁🎊</h2>
+                <button id="back-to-dashboard-from-earn" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-300 transition duration-200">Back</button>
+            </div>
+
+            <div class="bg-gray-100 p-6 rounded-xl shadow-inner mb-6">
+                <div class="flex justify-between items-center mb-4 bg-white p-3 rounded-lg border">
+                    <p class="font-semibold text-gray-800">Your referral code:</p>
+                    <div class="flex items-center space-x-2">
+                        <span id="referral-code-display" class="text-violet-600 font-medium">user4854</span>
+                        <button id="copy-referral-code-btn" class="p-1 text-gray-500 hover:text-violet-600 transition duration-200">
+                            <i class="ph-bold ph-copy text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+                <p class="text-lg text-gray-700 mb-4">
+                    Refer someone with your referral code and get a bonus of NGN10,000. You must have withdrawn before you can get paid for referral.
+                </p>
+                <div class="bg-violet-100 p-4 rounded-lg text-center">
+                    <p class="text-sm font-medium text-violet-800">Number of referral:</p>
+                    <p id="referral-count" class="text-4xl font-extrabold text-violet-900">0</p>
+                </div>
+            </div>
+
+            <!-- New Gemini API integration for generating referral posts -->
+            <div class="mt-6">
+                <button id="generate-referral-post-btn" class="w-full bg-pink-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-pink-600 transition duration-300 shadow-md flex items-center justify-center space-x-2">
+                    <span class="text-xl">✨</span>
+                    <span>Generate a referral post</span>
+                </button>
+                <div id="post-loading-spinner" class="mt-4 text-center hidden">
+                    <div class="spinner mx-auto"></div>
+                    <p class="text-gray-500 mt-2">Generating a post for you...</p>
+                </div>
+                <div id="referral-post-output" class="mt-4 p-4 bg-gray-100 rounded-lg hidden">
+                    <p class="text-sm text-gray-600 mb-2">Your personalized referral post:</p>
+                    <textarea id="generated-post-text" class="w-full p-2 bg-white rounded-lg border-2 border-gray-300 text-gray-800 focus:outline-none" rows="6" readonly></textarea>
+                    <button id="copy-post-btn" class="mt-4 w-full bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300">
+                        Copy Post
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profile-page" class="page hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-violet-700">Profile</h2>
+                <button id="back-to-dashboard-from-profile" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-300 transition duration-200">Back</button>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label for="full-name-input" class="sr-only">Enter full name</label>
+                    <input type="text" id="full-name-input" placeholder="Enter full name" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200" required>
+                </div>
+                <div>
+                    <label for="nin-input" class="sr-only">NIN</label>
+                    <input type="text" id="nin-input" placeholder="NIN" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200" required>
+                </div>
+            </div>
+            
+            <button id="submit-profile-btn" class="w-full mt-6 bg-violet-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-violet-700 transition duration-300 shadow-md">Submit</button>
+            <p id="profile-status-message" class="text-center mt-4 hidden"></p>
+        </div>
+
+        <!-- Company Profile Page -->
+        <div id="company-profile-page" class="page hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-violet-700">Company Profile</h2>
+                <button id="back-to-dashboard-from-company-profile" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-300 transition duration-200">Back</button>
+            </div>
+
+            <div class="bg-gray-100 p-6 rounded-xl shadow-inner mb-6">
+                <p class="text-lg text-gray-700 leading-relaxed">
+                    Paygo is a website that was created to get everyone financially stable. Make sure you withdraw from this website. You can also earn by referring your friends and family to Paygo. More bonus.
+                </p>
+            </div>
+        </div>
+        
+        <!-- Custom Message Box for Errors/Info (instead of alert()) -->
+        <div id="message-box" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center z-50 p-4 hidden">
+            <div class="bg-white rounded-xl p-8 shadow-2xl text-center max-w-sm w-full">
+                <p id="message-box-text" class="text-lg text-gray-700 mb-6"></p>
+                <button id="close-message-box-btn" class="w-full bg-violet-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-violet-700 transition duration-300 shadow-md">OK</button>
+            </div>
+        </div>
+
+        <!-- Custom Copy Modal for Better UX -->
+        <div id="copy-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center z-50 p-4 hidden">
+            <div class="bg-white rounded-xl p-8 shadow-2xl text-center max-w-lg w-full animate-fade-in">
+                <h2 class="text-2xl font-bold mb-4 text-violet-600">Please Copy Manually</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    Copy the text below and paste it where you need it.
+                </p>
+                <textarea id="copy-modal-text" class="w-full p-2 bg-gray-100 rounded-lg border-2 border-gray-300 text-gray-800 text-left" rows="5" readonly></textarea>
+                <button id="close-copy-modal-btn" class="w-full mt-4 bg-violet-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-violet-700 transition duration-300 shadow-md">Done</button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- State Management and Variables ---
+            // A simple object to manage the application state
+            const state = {
+                currentPage: 'login-page',
+                lastPage: 'login-page',
+                username: '',
+                balance: 180000.00,
+                referralCode: '',
+                referralCount: 0,
+                // Hardcoded grant code for simulation
+                grantCode: '41419',
+                // To track if the user has made a withdrawal
+                hasWithdrawn: false
+            };
+
+            // --- DOM Elements ---
+            const appContainer = document.getElementById('app-container');
+            const pages = document.querySelectorAll('.page');
+            const messageBox = document.getElementById('message-box');
+            const messageBoxText = document.getElementById('message-box-text');
+            const closeMessageBoxBtn = document.getElementById('close-message-box-btn');
+            const copyModal = document.getElementById('copy-modal');
+            const copyModalText = document.getElementById('copy-modal-text');
+            const closeCopyModalBtn = document.getElementById('close-copy-modal-btn');
+
+            // --- Page Elements ---
+            // Login/Register
+            const loginBtn = document.getElementById('login-btn');
+            const toRegisterBtn = document.getElementById('to-register-btn');
+            const registerBtn = document.getElementById('register-btn');
+            const backToLoginBtn = document.getElementById('back-to-login-btn');
+            const loginUsernameInput = document.getElementById('login-username');
+            const loginPasswordInput = document.getElementById('login-password');
+            const registerUsernameInput = document.getElementById('register-username');
+            const registerEmailInput = document.getElementById('register-email');
+            const registerPasswordInput = document.getElementById('register-password');
+            const registerConfirmPasswordInput = document.getElementById('register-confirm-password');
+            
+            // Dashboard
+            const welcomePopup = document.getElementById('welcome-popup');
+            const thanksBtn = document.getElementById('thanks-btn');
+            const dashboardMain = document.getElementById('dashboard-main');
+            const dashboardUsernameDisplay = document.getElementById('dashboard-username');
+            const dashboardBalanceDisplay = document.getElementById('dashboard-balance');
+            const withdrawalFeed = document.getElementById('withdrawal-feed');
+
+            // Buttons for dashboard navigation
+            const withdrawBtn = document.getElementById('withdraw-btn');
+            const getGrantCodeBtn = document.getElementById('get-grant-code-btn');
+            const earnMoreBtn = document.getElementById('earn-more-btn');
+            const profileBtn = document.getElementById('profile-btn');
+            const companyProfileBtn = document.getElementById('company-profile-btn');
+
+            // Withdraw Page
+            const backToDashboardFromWithdrawBtn = document.getElementById('back-to-dashboard-from-withdraw');
+            const accountNumberInput = document.getElementById('account-number');
+            const accountNameInput = document.getElementById('account-name');
+            const bankNameInput = document.getElementById('bank-name');
+            const grantCodeInput = document.getElementById('grant-code');
+            const amountInput = document.getElementById('amount');
+            const initiateWithdrawBtn = document.getElementById('initiate-withdraw-btn');
+            const withdrawErrorMsg = document.getElementById('withdraw-error-msg');
+            const withdrawConfirmModal = document.getElementById('withdraw-confirm-modal');
+            const confirmAmountSpan = document.getElementById('confirm-amount');
+            const confirmAccountNameSpan = document.getElementById('confirm-account-name');
+            const confirmAccountNumberSpan = document.getElementById('confirm-account-number');
+            const confirmBankNameSpan = document.getElementById('confirm-bank-name');
+            const confirmWithdrawBtn = document.getElementById('confirm-withdraw-btn');
+            const withdrawSuccessModal = document.getElementById('withdraw-success-modal');
+            const closeSuccessModalBtn = document.getElementById('close-success-modal-btn');
+            
+            // Grant Code Page
+            const backToDashboardFromGrantCodeBtn = document.getElementById('back-to-dashboard-from-grant-code');
+            const purchaseGrantCodeBtn = document.getElementById('purchase-grant-code-btn');
+            const backToGrantCodePageBtn = document.getElementById('back-to-grant-code-page');
+            const madePaymentBtn = document.getElementById('made-payment-btn');
+            const accountNumberDisplay = document.getElementById('account-number-display');
+            const copyAccountNumberBtn = document.getElementById('copy-account-number-btn');
+            const paymentStatusMessage = document.getElementById('payment-status-message');
+
+            // Earn More Page
+            const backToDashboardFromEarnBtn = document.getElementById('back-to-dashboard-from-earn');
+            const referralCodeDisplay = document.getElementById('referral-code-display');
+            const copyReferralCodeBtn = document.getElementById('copy-referral-code-btn');
+            const generateReferralPostBtn = document.getElementById('generate-referral-post-btn');
+            const postLoadingSpinner = document.getElementById('post-loading-spinner');
+            const referralPostOutput = document.getElementById('referral-post-output');
+            const generatedPostText = document.getElementById('generated-post-text');
+            const copyPostBtn = document.getElementById('copy-post-btn');
+
+            // Profile Page
+            const backToDashboardFromProfileBtn = document.getElementById('back-to-dashboard-from-profile');
+            const submitProfileBtn = document.getElementById('submit-profile-btn');
+            const profileStatusMessage = document.getElementById('profile-status-message');
+
+            // Company Profile Page
+            const backToDashboardFromCompanyProfileBtn = document.getElementById('back-to-dashboard-from-company-profile');
+
+            // --- Utility Functions ---
+
+            // Function to show a custom message box instead of alert()
+            function showMessageBox(message) {
+                messageBoxText.textContent = message;
+                messageBox.classList.remove('hidden');
+            }
+
+            // Function to show a custom copy modal
+            function showCopyModal(textToCopy) {
+                copyModalText.value = textToCopy;
+                copyModal.classList.remove('hidden');
+            }
+
+            // Function to handle page navigation
+            function showPage(pageId) {
+                state.lastPage = state.currentPage;
+                state.currentPage = pageId;
+                pages.forEach(page => {
+                    if (page.id === pageId) {
+                        page.classList.remove('hidden');
+                    } else {
+                        page.classList.add('hidden');
+                    }
+                });
+            }
+
+            // Function to update the dashboard UI
+            function updateDashboard() {
+                dashboardUsernameDisplay.textContent = state.username;
+                dashboardBalanceDisplay.textContent = `NGN${state.balance.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+                referralCodeDisplay.textContent = state.referralCode;
+            }
+
+            // --- Event Listeners and Logic ---
+
+            // Login Button
+            loginBtn.addEventListener('click', () => {
+                const username = loginUsernameInput.value.trim();
+                const password = loginPasswordInput.value.trim();
+                if (username && password) {
+                    state.username = username;
+                    state.referralCode = username.toLowerCase().replace(/[^a-z0-9]/g, '');
+                    updateDashboard();
+                    showPage('dashboard-page');
+                } else {
+                    showMessageBox('Please enter both username and password.');
+                }
+            });
+
+            // Register Button (from login page)
+            toRegisterBtn.addEventListener('click', () => {
+                showPage('register-page');
+            });
+
+            // Register Button (on register page)
+            registerBtn.addEventListener('click', () => {
+                const username = registerUsernameInput.value.trim();
+                const email = registerEmailInput.value.trim();
+                const password = registerPasswordInput.value.trim();
+                const confirmPassword = registerConfirmPasswordInput.value.trim();
+                
+                if (!username || !email || !password || !confirmPassword) {
+                    showMessageBox('Please fill in all required fields.');
+                    return;
+                }
+                if (password !== confirmPassword) {
+                    showMessageBox('Passwords do not match.');
+                    return;
+                }
+                
+                // For this simulation, we just move to the dashboard after a valid register
+                state.username = username;
+                state.referralCode = username.toLowerCase().replace(/[^a-z0-9]/g, '');
+                updateDashboard();
+                showPage('dashboard-page');
+            });
+            
+            // Back to Login from Register page
+            backToLoginBtn.addEventListener('click', () => {
+                showPage('login-page');
+            });
+
+            // Welcome popup "Thanks" button
+            thanksBtn.addEventListener('click', () => {
+                welcomePopup.classList.add('hidden');
+                dashboardMain.classList.remove('hidden');
+                
+                // Start the withdrawal feed after the popup is closed
+                startWithdrawalFeed();
+            });
+
+            // Dashboard Navigation Buttons
+            withdrawBtn.addEventListener('click', () => showPage('withdraw-page'));
+            getGrantCodeBtn.addEventListener('click', () => showPage('get-grant-code-page'));
+            earnMoreBtn.addEventListener('click', () => showPage('earn-more-page'));
+            profileBtn.addEventListener('click', () => showPage('profile-page'));
+            companyProfileBtn.addEventListener('click', () => showPage('company-profile-page'));
+
+            // Back buttons for sub-pages
+            document.querySelectorAll('[id^="back-to-dashboard-from-"]').forEach(btn => {
+                btn.addEventListener('click', () => showPage('dashboard-page'));
+            });
+            backToGrantCodePageBtn.addEventListener('click', () => showPage('get-grant-code-page'));
+
+            // Withdraw logic
+            initiateWithdrawBtn.addEventListener('click', () => {
+                const accountNumber = accountNumberInput.value.trim();
+                const accountName = accountNameInput.value.trim();
+                const bankName = bankNameInput.value.trim();
+                const grantCode = grantCodeInput.value.trim();
+                const amount = parseFloat(amountInput.value);
+
+                withdrawErrorMsg.classList.add('hidden');
+
+                if (!accountNumber || !accountName || !bankName || !grantCode || !amount) {
+                    showMessageBox('Please fill in all fields.');
+                    return;
+                }
+                if (grantCode !== state.grantCode) {
+                    showMessageBox('Invalid grant code. Please try again.');
+                    return;
+                }
+                if (amount > state.balance) {
+                    showMessageBox('Insufficient balance.');
+                    return;
+                }
+                
+                // Populate the confirmation modal and show it
+                confirmAmountSpan.textContent = `NGN${amount.toLocaleString()}`;
+                confirmAccountNameSpan.textContent = accountName;
+                confirmAccountNumberSpan.textContent = accountNumber;
+                confirmBankNameSpan.textContent = bankName;
+                
+                withdrawConfirmModal.classList.remove('hidden');
+            });
+
+            // Confirm withdrawal button
+            confirmWithdrawBtn.addEventListener('click', () => {
+                const amount = parseFloat(amountInput.value);
+                state.balance -= amount;
+                state.hasWithdrawn = true;
+                updateDashboard();
+
+                withdrawConfirmModal.classList.add('hidden');
+                withdrawSuccessModal.classList.remove('hidden');
+            });
+            
+            // Close success modal button
+            closeSuccessModalBtn.addEventListener('click', () => {
+                withdrawSuccessModal.classList.add('hidden');
+                showPage('dashboard-page');
+                // Clear withdraw form fields
+                accountNumberInput.value = '';
+                accountNameInput.value = '';
+                bankNameInput.value = '';
+                grantCodeInput.value = '';
+                amountInput.value = '';
+            });
+
+            // Grant Code purchase logic
+            purchaseGrantCodeBtn.addEventListener('click', () => {
+                showPage('grant-code-payment-page');
+            });
+
+            madePaymentBtn.addEventListener('click', () => {
+                paymentStatusMessage.classList.remove('hidden');
+                paymentStatusMessage.classList.remove('text-red-500');
+                paymentStatusMessage.classList.add('text-gray-500');
+                paymentStatusMessage.textContent = 'Confirming payment...';
+                
+                setTimeout(() => {
+                    paymentStatusMessage.textContent = 'Payment not confirmed. Please try again.';
+                    paymentStatusMessage.classList.remove('text-gray-500');
+                    paymentStatusMessage.classList.add('text-red-500');
+                }, 6000);
+            });
+            
+            // Copy account number button
+            copyAccountNumberBtn.addEventListener('click', () => {
+                showCopyModal(accountNumberDisplay.textContent);
+            });
+            
+            // Copy referral code button
+            copyReferralCodeBtn.addEventListener('click', () => {
+                showCopyModal(referralCodeDisplay.textContent);
+            });
+
+            // Profile submission logic
+            submitProfileBtn.addEventListener('click', () => {
+                const fullName = document.getElementById('full-name-input').value.trim();
+                const nin = document.getElementById('nin-input').value.trim();
+                if (fullName && nin) {
+                    profileStatusMessage.classList.remove('hidden');
+                    profileStatusMessage.classList.remove('text-red-500');
+                    profileStatusMessage.classList.add('text-green-500');
+                    profileStatusMessage.textContent = 'Under review, we will let you know when it verified.';
+                } else {
+                    profileStatusMessage.classList.remove('hidden');
+                    profileStatusMessage.classList.remove('text-green-500');
+                    profileStatusMessage.classList.add('text-red-500');
+                    profileStatusMessage.textContent = 'Please fill in all fields.';
+                }
+            });
+
+            // Close message box button
+            closeMessageBoxBtn.addEventListener('click', () => {
+                messageBox.classList.add('hidden');
+            });
+            
+            // Close copy modal button
+            closeCopyModalBtn.addEventListener('click', () => {
+                copyModal.classList.add('hidden');
+            });
+
+
+            // --- New Gemini API integration for generating referral posts ---
+            generateReferralPostBtn.addEventListener('click', async () => {
+                postLoadingSpinner.classList.remove('hidden');
+                referralPostOutput.classList.add('hidden');
+                generatedPostText.textContent = '';
+                
+                // Construct the prompt for the Gemini API
+                const prompt = `Write a short, engaging social media post to encourage friends to sign up for a new financial platform called Paygo. Mention that new users get a NGN180,000 bonus for free and can earn more by referring others. The post should be in a friendly, casual tone and include relevant emojis. Use the referral code: "${state.referralCode}".`;
+
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = { contents: chatHistory };
+                const apiKey = ""
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                
+                let retries = 0;
+                const maxRetries = 3;
+                let delay = 1000; // 1 second
+
+                async function fetchWithRetry() {
+                    try {
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        if (!response.ok) {
+                            if (response.status === 429 && retries < maxRetries) {
+                                // Exponential backoff for rate limiting
+                                console.warn(`API call failed with status ${response.status}. Retrying in ${delay}ms...`);
+                                await new Promise(resolve => setTimeout(resolve, delay));
+                                delay *= 2;
+                                retries++;
+                                return fetchWithRetry();
+                            }
+                            throw new Error(`API response error: ${response.statusText}`);
+                        }
+
+                        const result = await response.json();
+                        
+                        if (result.candidates && result.candidates.length > 0 &&
+                            result.candidates[0].content && result.candidates[0].content.parts &&
+                            result.candidates[0].content.parts.length > 0) {
+                            const text = result.candidates[0].content.parts[0].text;
+                            generatedPostText.value = text;
+                            referralPostOutput.classList.remove('hidden');
+                        } else {
+                            showMessageBox('Could not generate a post. The API response was empty or malformed.');
+                        }
+                    } catch (error) {
+                        console.error('API Error:', error);
+                        showMessageBox('An error occurred while generating the post. Please try again later.');
+                    } finally {
+                        postLoadingSpinner.classList.add('hidden');
+                    }
+                }
+
+                fetchWithRetry();
+            });
+
+            // Copy the generated referral post to clipboard
+            copyPostBtn.addEventListener('click', () => {
+                showCopyModal(generatedPostText.value);
+            });
+
+            // --- Simulated Live Withdrawal Feed ---
+            const mockUsers = [
+                { username: 'User4854', amount: 180000 },
+                { username: 'User8555', amount: 170000 },
+                { username: 'User9683', amount: 180000 },
+                { username: 'User3656', amount: 180000 },
+                { username: 'User1234', amount: 175000 },
+                { username: 'User5678', amount: 190000 }
+            ];
+
+            function addWithdrawalMessage() {
+                const randomUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
+                const message = `${randomUser.username} just withdrew NGN${randomUser.amount.toLocaleString()}`;
+                
+                const li = document.createElement('li');
+                li.textContent = message;
+                li.classList.add('animate-fade-in');
+                
+                withdrawalFeed.appendChild(li);
+                
+                // Keep the list from getting too long
+                if (withdrawalFeed.children.length > 5) {
+                    withdrawalFeed.removeChild(withdrawalFeed.firstElementChild);
+                }
+                
+                // Scroll to the bottom of the feed
+                withdrawalFeed.scrollTop = withdrawalFeed.scrollHeight;
+            }
+
+            function startWithdrawalFeed() {
+                // Check if the feed is already running to prevent multiple intervals
+                if (!window.withdrawalInterval) {
+                    window.withdrawalInterval = setInterval(addWithdrawalMessage, 3000);
+                }
+            }
+
+            // Initial setup: Show the login page
+            showPage('login-page');
+        });
+    </script>
+</body>
+</html>

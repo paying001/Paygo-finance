@@ -1,2 +1,0 @@
-# Paygo-finance
-Free grant 
